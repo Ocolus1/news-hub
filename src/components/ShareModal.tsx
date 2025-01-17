@@ -1,5 +1,4 @@
-import React from 'react';
-import { X, Link, Twitter, Facebook, Linkedin } from 'lucide-react';
+import { X as CloseIcon, Link, Linkedin } from 'lucide-react';
 import type { Article } from '../types';
 
 interface ShareModalProps {
@@ -7,17 +6,32 @@ interface ShareModalProps {
 	onClose: () => void;
 }
 
+// Custom X (Twitter) logo component
+function XLogo() {
+	return (
+		<svg
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+				fill="currentColor"
+			/>
+		</svg>
+	);
+}
+
 export function ShareModal({ article, onClose }: ShareModalProps) {
 	const shareUrl = article.url;
 	const shareText = `Check out this article: ${article.title}`;
 
 	const shareLinks = {
-		twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+		x: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
 			shareUrl
 		)}&text=${encodeURIComponent(shareText)}`,
-		facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-			shareUrl
-		)}`,
 		linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
 			shareUrl
 		)}&title=${encodeURIComponent(article.title)}`,
@@ -26,11 +40,18 @@ export function ShareModal({ article, onClose }: ShareModalProps) {
 	const copyToClipboard = async () => {
 		try {
 			await navigator.clipboard.writeText(shareUrl);
-			// You could add a toast notification here
 			console.log('URL copied to clipboard');
 		} catch (err) {
 			console.error('Failed to copy URL:', err);
 		}
+	};
+
+	const handleShareClick = (platform: string, url: string) => {
+		window.open(
+			url,
+			`Share on ${platform}`,
+			'width=600,height=400,location=0,menubar=0'
+		);
 	};
 
 	return (
@@ -50,39 +71,31 @@ export function ShareModal({ article, onClose }: ShareModalProps) {
 						onClick={onClose}
 						className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
 					>
-						<X className="w-5 h-5" />
+						<CloseIcon className="w-5 h-5" />
 					</button>
 				</div>
 
 				<div className="space-y-4">
 					<div className="flex justify-center space-x-6">
-						<a
-							href={shareLinks.twitter}
-							target="_blank"
-							rel="noopener noreferrer"
+						<button
+							onClick={() => handleShareClick('X', shareLinks.x)}
 							className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-							aria-label="Share on Twitter"
+							aria-label="Share on X"
 						>
-							<Twitter className="w-6 h-6 text-[#1DA1F2]" />
-						</a>
-						<a
-							href={shareLinks.facebook}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-							aria-label="Share on Facebook"
-						>
-							<Facebook className="w-6 h-6 text-[#4267B2]" />
-						</a>
-						<a
-							href={shareLinks.linkedin}
-							target="_blank"
-							rel="noopener noreferrer"
+							<XLogo />
+						</button>
+						<button
+							onClick={() =>
+								handleShareClick(
+									'LinkedIn',
+									shareLinks.linkedin
+								)
+							}
 							className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
 							aria-label="Share on LinkedIn"
 						>
 							<Linkedin className="w-6 h-6 text-[#0077B5]" />
-						</a>
+						</button>
 					</div>
 
 					<div className="flex items-center space-x-2">

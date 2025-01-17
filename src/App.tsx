@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { CategoryBar } from './components/CategoryBar';
 import { ArticleCard } from './components/ArticleCard';
@@ -8,7 +8,7 @@ import { fetchNews } from './services/newsApi';
 import type { Article, Category } from './types';
 
 // Mock data for initial state and fallback
-const mockArticles = [
+const mockArticles: Article[] = [
 	{
 		id: '1',
 		title: 'The Future of AI in Healthcare',
@@ -68,7 +68,7 @@ function App() {
 				if (response && response.articles) {
 					setArticles(
 						response.articles.map(
-							(article: any, index: number) => ({
+							(article: Article, index: number) => ({
 								...article,
 								id: article.id || String(index + 1),
 							})

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bookmark, Share2 } from 'lucide-react';
 import { Article } from '../types';
 

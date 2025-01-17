@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Search, Moon, Sun, X } from 'lucide-react';
-import { useDebounce } from '../hooks/useDebounce';
+import { useDebounce } from '../hooks/useDebounce.ts';
 
 interface HeaderProps {
 	darkMode: boolean;
